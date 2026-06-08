@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syllabus & Portal Gateway - Brilliant Baraka Institute of Professional Studies</title>
+    <meta name="description" content="Official learning management system, course curriculum units tracker, and virtual live classroom streaming gateway for Brilliant Baraka Institute.">
+    <style>
+        :root {
+            --primary-green: #004d26;
+            --secondary-green: #007a3d;
+            --accent-gold: #d4af37;
+            --bg-light: #f4f7f5;
+            --text-dark: #1c2821;
+            --white: #ffffff;
+            --card-width: 310px;
+            --card-height: 420px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* 1. PORTAL GATEWAY PRIVACY LOCK OVERLAY */
+        #portal-security-lock {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #06140c;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+        }
+
+        .security-container {
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            border-top: 6px solid var(--accent-gold);
+        }
+
+        .security-container h2 {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .security-container p {
+            font-size: 0.88rem;
+            color: #666;
+            margin-bottom: 22px;
+        }
+
+        .security-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .security-input:focus {
+            border-color: var(--primary-green);
+        }
+
+        .security-btn {
+            background: var(--primary-green);
+            color: var(--white);
+            border: none;
+            padding: 13px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .security-btn:hover {
+            background: var(--secondary-green);
+        }
+
+        .error-response {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* 2. MAIN HEADER & HERO BANNER */
+        .header-banner {
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 6px solid var(--accent-gold);
+        }
+
+        .header-banner h1 {
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .header-banner p {
+            color: var(--accent-gold);
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        .section-header {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--accent-gold);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* 3. RESPONSIBLE 3D CARD FLIP LAYOUTS */
+        .diploma-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(var(--card-width), 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            justify-items: center;
+        }
+
+        .flip-box {
+            perspective: 1000px;
+            width: var(--card-width);
+            height: var(--card-height);
+        }
+
+        .flip-box-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        /* Hover on desktop, active flipped class for mobile support via JavaScript */
+        .flip-box:hover .flip-box-inner, .flip-box.is-flipped .flip-box-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front-face, .card-back-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-front-face {
+            background-color: var(--white);
+            color: var(--text-dark);
+            border-left: 6px solid var(--primary-green);
+            text-align: left;
+        }
+
+        .card-front-face h3 {
+            color: var(--primary-green);
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .card-front-face .track-badge {
+            background: #eef5ed;
+            color: var(--primary-green);
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 12px;
+            align-self: flex-start;
+            text-transform: uppercase;
+            border: 1px solid #d2e4d7;
+        }
+
+        .card-front-face .action-hint {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+            font-style: italic;
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+        }
+
+        .card-back-face {
+            background-color: var(--primary-green);
+            color: var(--white);
+            transform: rotateY(180deg);
+            border-left: 6px solid var(--accent-gold);
+            text-align: left;
+        }
+
+        .card-back-face h4 {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 5px;
+        }
+
+        .syllabus-units-list {
+            list-style: none;
+            font-size: 0.88rem;
+        }
+
+        .syllabus-units-list li {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .syllabus-units-list li::before {
+            content: "▪";
+            color: var(--accent-gold);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* 4. CLASS STREAMING INTERACTIVE SWITCHES */
+        .streaming-panel {
+            background: rgba(255,255,255,0.08);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .streaming-panel p {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .stream-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-stream {
+            text-align: center;
+            padding: 8px 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-meet { background-color: #ea4335; color: white; }
+        .btn-zoom { background-color: #2d8cff; color: white; }
+        .btn-stream:hover { opacity: 0.9; }
+
+        /* 5. INSTITUTIONAL ABOUT US BLOCK */
+        .about-institution-section {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 60px;
+            border-top: 4px solid var(--primary-green);
+        }
+
+        .about-institution-section p {
+            margin-bottom: 15px;
+            color: #444;
+            text-align: justify;
+        }
+
+        /* 6. SYLLABUS DIRECT DOWNLOAD MATRIX */
+        .download-repository-box {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 60px;
+        }
+
+        .repo-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .repo-table th, .repo-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .repo-table th {
+            background-color: #f0f4f1;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        .btn-download-pdf {
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-download-pdf:hover {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        /* 7. INSTITUTIONAL FOOTER & CONTACT SYSTEM */
+        .portal-footer {
+            background-color: #0d1712;
+            color: #b3bfb7;
+            padding: 40px 20px 20px 20px;
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #1f2e25;
+        }
+
+        .footer-column h4 {
+            color: var(--white);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-left: 3px solid var(--accent-gold);
+            padding-left: 10px;
+        }
+
+        .footer-column p, .footer-column a {
+            font-size: 0.88rem;
+            color: #cbd5ce;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent-gold);
+        }
+
+        .social-link-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .social-icon-btn {
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .icon-wa { background-color: #25d366; }
+        .icon-fb { background-color: #1877f2; }
+        .icon-ig { background-color: #e1306c; }
+
+        .footer-copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #66736b;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .flip-box { width: 100%; }
+            .repo-table th, .repo-table td { padding: 8px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="portal-security-lock">
+        <div class="security-container">
+            <h2>BRIBIPS Academic Network</h2>
+            <p>Authentication Required. Access restricted to registered Brilliant Baraka Institute profiles.</p>
+            <input type="password" id="passkeyInput" class="security-input" placeholder="Enter Secure Access Passkey" onkeypress="checkEnterKey(event)">
+            <div id="auth-error-msg" class="error-response">❌ Access Denied: Invalid Institutional Passkey.</div>
+            <button onclick="authenticateAccess()" class="security-btn">Unlock Secure Portal</button>
+        </div>
+    </div>
+
+    <header class="header-banner">
+        <h1>Brilliant Baraka Institute of Professional Studies</h1>
+        <p>Official Diploma Curriculums &amp; Video Streaming Portal</p>
+    </header>
+
+    <div class="main-wrapper">
+        
+        <section class="about-institution-section">
+            <h2 class="section-header">About Our Institution</h2>
+            <p>Brilliant Baraka Institute of Professional Studies (BRIBIPS) is a premier technical training institution committed to delivering top-tier, industry-relevant curriculum tracks. Strategically focused on cultivating practical competencies, the institute empowers students with highly marketable skills across diverse technical, engineering, and enterprise domains.</p>
+            <p>Through our comprehensive digital transformation initiatives, BRIBIPS provides a state-of-the-art hybrid learning environment. By combining rigorous physical training metrics with real-time video streaming pathways and unedited course reference sheets, we guarantee uncompromised academic continuity for all our scholars.</p>
+        </section>
+
+        <section aria-label="Accredited Programs Management Grid">
+            <h2 class="section-header">Registered Diploma Programs</h2>
+            <div class="diploma-grid">
+                
+                <div class="flip-box" onclick="toggleCardFlip(this)">
+                    <div class="flip-box-inner">
+                        <div class="card-front-face">
+                            <div>
+                                <span class="track-badge">Tech Department</span>
+                                <h3 style="margin-top: 12px;">Diploma in Information Communication Technology (ICT)</h3>
+                                <p style="font-size: 0.85rem; color: #555;">Advanced programming, hardware layout, and system structures engineering.</p>
+                            </div>
+                            <div class="action-hint">Tap / Hover to view modules &amp; stream class</div>
+                        </div>
+                        <div class="card-back-face">
+                            <h4>Course Core Units</h4>
+                            <ul class="syllabus-units-list">
+                                <li>Structured Programming Concepts</li>
+                                <li>Network Auditing &amp; Security Tools</li>
+                                <li>Database Management Architectures</li>
+                                <li>Operating Systems Installation</li>
+                                <li>Entrepreneurship Education</li>
+                                <li>Communication Skills</li>
+                            </ul>
+                            <div class="streaming-panel">
+                                <p>Live Lecture Streaming</p>
+                                <div class="stream-links">
+                                    <a href="https://meet.google.com" target="_blank" class="btn-stream btn-meet" onclick="stopPropagationEvent(event)">Zoom/Meet</a>
+                                    <a href="https://zoom.us" target="_blank" class="btn-stream btn-zoom" onclick="stopPropagationEvent(event)">Zoom Room</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-box" onclick="toggleCardFlip(this)">
+                    <div class="flip-box-inner">
+                        <div class="card-front-face">
+                            <div>
+                                <span class="track-badge">Business Department</span>
+                                <h3 style="margin-top: 12px;">Diploma in Business Management</h3>
+                                <p style="font-size: 0.85rem; color: #555;">Corporate strategy, financial operations, asset organization, and legal principles.</p>
+                            </div>
+                            <div class="action-hint">Tap / Hover to view modules &amp; stream class</div>
+                        </div>
+                        <div class="card-back-face">
+                            <h4>Course Core Units</h4>
+                            <ul class="syllabus-units-list">
+                                <li>Principles &amp; Practice of Management</li>
+                                <li>Financial Accounting &amp; Business Records</li>
+                                <li>Managerial Economics Foundations</li>
+                                <li>Office Administration Procedures</li>
+                                <li>Entrepreneurship Education</li>
+                                <li>Communication Skills</li>
+                            </ul>
+                            <div class="streaming-panel">
+                                <p>Live Lecture Streaming</p>
+                                <div class="stream-links">
+                                    <a href="https://meet.google.com" target="_blank" class="btn-stream btn-meet" onclick="stopPropagationEvent(event)">Zoom/Meet</a>
+                                    <a href="https://zoom.us" target="_blank" class="btn-stream btn-zoom" onclick="stopPropagationEvent(event)">Zoom Room</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-box" onclick="toggleCardFlip(this)">
+                    <div class="flip-box-inner">
+                        <div class="card-front-face">
+                            <div>
+                                <span class="track-badge">Business Department</span>
+                                <h3 style="margin-top: 12px;">Diploma in Banking and Finance</h3>
+                                <p style="font-size: 0.85rem; color: #555;">Financial statements, institutional credit mechanics, and wealth portfolio management.</p>
+                            </div>
+                            <div class="action-hint">Tap / Hover to view modules &amp; stream class</div>
+                        </div>
+                        <div class="card-back-face">
+                            <h4>Course Core Units</h4>
+                            <ul class="syllabus-units-list">
+                                <li>Commercial Banking Operations</li>
+                                <li>Financial Statements &amp; Audit Systems</li>
+                                <li>Micro-Finance Management Channels</li>
+                                <li>Investment &amp; Portfolio Risk Analysis</li>
+                                <li>Communication Skills</li>
+                            </ul>
+                            <div class="streaming-panel">
+                                <p>Live Lecture Streaming</p>
+                                <div class="stream-links">
+                                    <a href="https://meet.google.com" target="_blank" class="btn-stream btn-meet" onclick="stopPropagationEvent(event)">Zoom/Meet</a>
+                                    <a href="https://zoom.us" target="_blank" class="btn-stream btn-zoom" onclick="stopPropagationEvent(event)">Zoom Room</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-box" onclick="toggleCardFlip(this)">
+                    <div class="flip-box-inner">
+                        <div class="card-front-face">
+                            <div>
+                                <span class="track-badge">Business Department</span>
+                                <h3 style="margin-top: 12px;">Diploma in Banking and Finance</h3>
+                                <p style="font-size: 0.85rem; color: #555;">Financial statements, institutional credit mechanics, and wealth portfolio management.</p>
+                            </div>
+                            <div class="action-hint">Tap / Hover to view modules &amp; stream class</div>
+                        </div>
+                        <div class="card-back-face">
+                            <h4>Course Core Units</h4>
+                            <ul class="syllabus-units-list">
+                                <li>Commercial Banking Operations</li>
+                                <li>Financial Statements &amp; Audit Systems</li>
+                                <li>Micro-Finance Management Channels</li>
+                                <li>Investment &amp; Portfolio Risk Analysis</li>
+                                <li>Communication Skills</li>
+                            </ul>
+                            <div class="streaming-panel">
+                                <p>Live Lecture Streaming</p>
+                                <div class="stream-links">
+                                    <a href="https://meet.google.com" target="_blank" class="btn-stream btn-meet" onclick="stopPropagationEvent(event)">Zoom/Meet</a>
+                                    <a href="https://zoom.us" target="_blank" class="btn-stream btn-zoom" onclick="stopPropagationEvent(event)">Zoom Room</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-box" onclick="toggleCardFlip(this)">
+                    <div class="flip-box-inner">
+                        <div class="card-front-face">
+                            <div>
+                                <span class="track-badge">Secretarial Track</span>
+                                <h3 style="margin-top: 12px;">Diploma in Secretarial Studies</h3>
+                                <p style="font-size: 0.85rem; color: #555;">Advanced corporate typing speed, filing systems, and office administration protocols.</p>
+                            </div>
+                            <div class="action-hint">Tap / Hover to view modules &amp; stream class</div>
+                        </div>
+                        <div class="card-back-face">
+                            <h4>Course Core Units</h4>
+                            <ul class="syllabus-units-list">
+                                <li>Shorthand and Typing Speed Mechanics</li>
+                                <li>Secretarial Duties &amp; Office Ethics</li>
+                                <li>Business Law &amp; Document Drafting</li>
+                                <li>Records Management &amp; File Archiving</li>
+                                <li>Communication Skills</li>
+                            </ul>
+                            <div class="streaming-panel">
+                                <p>Live Lecture Streaming</p>
+                                <div class="stream-links">
+                                    <a href="https://meet.google.com" target="_blank" class="btn-stream btn-meet" onclick="stopPropagationEvent(event)">Zoom/Meet</a>
+                                    <a href="https://zoom.us" target="_blank" class="btn-stream btn-zoom" onclick="stopPropagationEvent(event)">Zoom Room</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="download-repository-box" aria-label="Official Documents Portal Download Box">
+            <h2 class="section-header">Official Textbook &amp; Syllabus Downloads</h2>
+            <p style="font-size: 0.9rem; color: #555; margin-bottom: 20px;">Download unedited, full academic curriculum files verified by the administration. All textbook content is free of processing errors or raw markup symbols.</p>
+            <table class="repo-table">
+                <thead>
+                    <tr>
+                        <th>Module Course Component</th>
+                        <th>Associated Curricular Track</th>
+                        <th>Action Check</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Structured Programming Course Notes (C Framework)</strong></td>
+                        <td>Diploma in ICT</td>
+                        <td><a href="pdfs/Structured_Programming.pdf" download class="btn-download-pdf">💾 Download PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Entrepreneurship Education (Full Unedited Notes)</strong></td>
+                        <td>Diploma in ICT &amp; Business Management</td>
+                        <td><a href="pdfs/Entrepreneurship_Notes.pdf" download class="btn-download-pdf">💾 Download PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Communication Skills (Full Comprehensive Syllabus)</strong></td>
+                        <td>All Institutional Diploma Programs</td>
+                        <td><a href="pdfs/Communication_Skills_Full.pdf" download class="btn-download-pdf">💾 Download PDF</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <footer class="portal-footer">
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h4>Contact Us Directly</h4>
+                <p>📍 Location: Main Campus, Mlolongo, Kenya</p>
+                <p>📞 Phone Line: <a href="tel:+254790126019">+254 790 126019</a></p>
+                <p>✉️ Email Address: info@brilliantbaraka.ac.ke</p>
+            </div>
+            <div class="footer-column">
+                <h4>Institutional Links</h4>
+                <a href="#">Academic Portal Dashboard</a>
+                <a href="#">Continuous Assessment Results</a>
+                <a href="#">TVET / CDACC Registration Portals</a>
+            </div>
+            <div class="footer-column">
+                <h4>Connect With Us Globally</h4>
+                <p>Follow our official media channels to receive immediate notifications regarding scheduling and holiday closures.</p>
+                <div class="social-link-row">
+                    <a href="https://wa.me/254790126019" target="_blank" class="social-icon-btn icon-wa">WhatsApp</a>
+                    <a href="https://facebook.com" target="_blank" class="social-icon-btn icon-fb">Facebook</a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon-btn icon-ig">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 Brilliant Baraka Institute of Professional Studies. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configured Passkey Protection Variable
+        const SECURITY_PASSKEY = "Baraka2026";
+
+        function authenticateAccess() {
+            const userEnteredValue = document.getElementById('passkeyInput').value;
+            const lockElement = document.getElementById('portal-security-lock');
+            const validationError = document.getElementById('auth-error-msg');
+
+            if (userEnteredValue === SECURITY_PASSKEY) {
+                lockElement.style.display = 'none';
+            } else {
+                validationError.style.display = 'block';
+            }
+        }
+
+        function checkEnterKey(event) {
+            if (event.key === "Enter") {
+                authenticateAccess();
+            }
+        }
+
+        // Touch Interaction Support Engine for Mobile Browsers
+        function toggleCardFlip(cardElement) {
+            cardElement.classList.toggle('is-flipped');
+        }
+
+        // Safety override script ensuring inner anchor button clicks don't trigger parent element card flip toggles
+        function stopPropagationEvent(event) {
+            event.stopPropagation();
+        }
+    </script>
+</body>
+</html>
+       
